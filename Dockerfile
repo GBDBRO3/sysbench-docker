@@ -14,7 +14,7 @@
 
 
 # Builder image
-FROM alpine:3.10 AS builder
+FROM alpine:3.13.2 AS builder
 
 ENV SYSBENCH_VERSION 1.0.17
 
@@ -37,10 +37,11 @@ RUN ./autogen.sh && \
 
 
 # Target image
-FROM alpine:3.10
+FROM alpine:3.13.2
 
 RUN apk add --no-cache libaio libgcc
 COPY --from=builder /usr/local/share/sysbench /usr/local/share/sysbench
 COPY --from=builder /usr/local/bin/sysbench   /usr/local/bin/sysbench
+USER 1001
 
 ENTRYPOINT ["/usr/local/bin/sysbench"]
